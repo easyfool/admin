@@ -50,7 +50,7 @@
 	        </div>
 	        
 	        <div class="col-sm-12 select-table table-striped">
-						<table id="bootstrap-tree-table"></table>
+			    <table id="bootstrap-table"></table>
 			</div>
 		</div>
 	</div>
@@ -58,20 +58,13 @@
 	<th:block th:include="include :: select2-js" />
 	<script th:inline="javascript">
 		var editFlag = [[${@permission.hasPermi('system:dict:edit')}]];
-		var addFlag = [[${@permission.hasPermi('system:dict:add')}]];
 		var removeFlag = [[${@permission.hasPermi('system:dict:remove')}]];
 		var datas = [[${@dict.getType('sys_normal_disable')}]];
 		var prefix = ctx + "system/dict/data";
 
-		var dictType = [[${dict.dictType}]];
-		console.log("字典类型dictType =============="+dictType);
-
 		$(function() {
 			var options = {
-				code: "dictCode",
-				parentCode: "parentCode",
-				uniqueId: "dictCode",
-				url: prefix + "/list?dictType=" + dictType,
+				url: prefix + "/list",
 				createUrl: prefix + "/add/{id}",
 				updateUrl: prefix + "/edit/{id}",
 				removeUrl: prefix + "/remove",
@@ -120,19 +113,14 @@
 						title: '操作',
 						align: 'center',
 						formatter: function(value, row, index) {
-							if (row.parentId != 0) {
-								var actions = [];
-								actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dictCode + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-								actions.push('<a class="btn btn-info  btn-xs ' + addFlag + '" href="javascript:void(0)" onclick="$.operate.add(\'' + row.dictCode + '\')"><i class="fa fa-plus"></i>新增</a> ');
-								actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dictCode + '\')"><i class="fa fa-trash"></i>删除</a>');
-								return actions.join('');
-							} else {
-								return "";
-							}
+							var actions = [];
+							actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dictCode + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+							actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dictCode + '\')"><i class="fa fa-remove"></i>删除</a>');
+							return actions.join('');
 						}
 					}]
 				};
-			$.treeTable.init(options);
+			$.table.init(options);
 		});
 		
 		function queryParams(params) {
